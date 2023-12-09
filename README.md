@@ -3,7 +3,7 @@
 > React components for the [PayPal JS SDK](https://developer.paypal.com/docs/business/javascript-sdk/javascript-sdk-reference/)
 
 <div class="badges">
-    <a href="https://github.com/paypal/react-paypal-js/actions?query=workflow%3Avalidate"><img src="https://img.shields.io/github/workflow/status/paypal/react-paypal-js/validate?logo=github&style=flat-square" alt="build status"></a>
+    <a href="https://github.com/paypal/react-paypal-js/actions?query=workflow%3Avalidate"><img src="https://img.shields.io/github/actions/workflow/status/paypal/react-paypal-js/validate.yml?branch=main&logo=github&style=flat-square" alt="build status"></a>
     <a href="https://codecov.io/github/paypal/react-paypal-js/"><img src="https://img.shields.io/codecov/c/github/paypal/react-paypal-js.svg?style=flat-square" alt="coverage"></a>
     <a href="https://www.npmjs.com/package/@paypal/react-paypal-js"><img src="https://img.shields.io/npm/v/@paypal/react-paypal-js.svg?style=flat-square" alt="npm version"></a>
     <a href="https://bundlephobia.com/result?p=@paypal/react-paypal-js"><img src="https://img.shields.io/bundlephobia/minzip/@paypal/react-paypal-js.svg?style=flat-square" alt="bundle size"></a>
@@ -57,7 +57,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function App() {
     return (
-        <PayPalScriptProvider options={{ "client-id": "test" }}>
+        <PayPalScriptProvider options={{ clientId: "test" }}>
             <PayPalButtons style={{ layout: "horizontal" }} />
         </PayPalScriptProvider>
     );
@@ -68,14 +68,13 @@ export default function App() {
 
 #### Options
 
-Use the PayPalScriptProvider `options` prop to configure the JS SDK. It accepts an object for passing query parameters and data attributes to the JS SDK script.
+Use the PayPalScriptProvider `options` prop to configure the JS SDK. It accepts an object for passing query parameters and data attributes to the JS SDK script. Use camelCase for the object keys (clientId, dataClientToken, dataNamespace, etc...).
 
 ```jsx
 const initialOptions = {
-    "client-id": "test",
+    clientId: "test",
     currency: "USD",
     intent: "capture",
-    "data-client-token": "abc123xyz==",
 };
 
 export default function App() {
@@ -102,7 +101,7 @@ Use the optional PayPalScriptProvider `deferLoading` prop to control when the JS
 </PayPalScriptProvider>
 ```
 
-To learn more, check out the [defer loading example in storybook](https://paypal.github.io/react-paypal-js/?path=/story/example-paypalscriptprovider--defer-loading).
+To learn more, check out the [defer loading example in storybook](https://paypal.github.io/react-paypal-js/?path=/story/example-paypalscriptprovider--default&args=deferLoading:true).
 
 #### Tracking loading state
 
@@ -128,7 +127,7 @@ return (
 );
 ```
 
-To learn more, check out the [loading spinner example in storybook](https://paypal.github.io/react-paypal-js/?path=/story/example-usepaypalscriptreducer--loading-spinner).
+To learn more, check out the [loading spinner example in storybook](https://paypal.github.io/react-paypal-js/?path=/story/example-paypalbuttons--default&args=showSpinner:true).
 
 #### Reloading when parameters change
 
@@ -161,7 +160,7 @@ return (
 );
 ```
 
-To learn more, check out the [dynamic currency example in storybook](https://paypal.github.io/react-paypal-js/?path=/story/example-usepaypalscriptreducer--currency).
+To learn more, check out the [dynamic currency example in storybook](https://paypal.github.io/react-paypal-js/?path=/docs/example-paypalbuttons--default).
 
 ### PayPalButtons
 
@@ -174,26 +173,49 @@ Here's an example:
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function App() {
+    function createOrder() {
+        return fetch("/my-server/create-paypal-order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // use the "body" param to optionally pass additional order information
+            // like product ids and quantities
+            body: JSON.stringify({
+                cart: [
+                    {
+                        id: "YOUR_PRODUCT_ID",
+                        quantity: "YOUR_PRODUCT_QUANTITY",
+                    },
+                ],
+            }),
+        })
+            .then((response) => response.json())
+            .then((order) => order.id);
+    }
+    function onApprove(data) {
+          return fetch("/my-server/capture-paypal-order", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              orderID: data.orderID
+            })
+          })
+          .then((response) => response.json())
+          .then((orderData) => {
+                const name = orderData.payer.name.given_name;
+                alert(`Transaction completed by ${name}`);
+          });
+
+        }
+    }
     return (
-        <PayPalScriptProvider options={{ "client-id": "test" }}>
+        <PayPalScriptProvider options={{ clientId: "test" }}>
             <PayPalButtons
-                createOrder={(data, actions) => {
-                    return actions.order.create({
-                        purchase_units: [
-                            {
-                                amount: {
-                                    value: "1.99",
-                                },
-                            },
-                        ],
-                    });
-                }}
-                onApprove={(data, actions) => {
-                    return actions.order.capture().then((details) => {
-                        const name = details.payer.name.given_name;
-                        alert(`Transaction completed by ${name}`);
-                    });
-                }}
+                createOrder={createOrder}
+                onApprove={onApprove}
             />
         </PayPalScriptProvider>
     );
@@ -217,8 +239,9 @@ export default function App() {
     return (
         <PayPalScriptProvider
             options={{
-                "client-id": "test",
-                "data-client-token": "abc123xyz==",
+                clientId: "test",
+                dataClientToken:
+                    "<the data-client-token value generated by your server-side code>",
             }}
         >
             <BraintreePayPalButtons
@@ -243,7 +266,7 @@ export default function App() {
 }
 ```
 
-Check out the docs page for the [BraintreePayPalButtons](https://paypal.github.io/react-paypal-js/?path=/docs/example-braintreepaypalbuttons--default) to learn more about the available props.
+Check out the docs page for the [BraintreePayPalButtons](https://paypal.github.io/react-paypal-js/?path=/docs/braintree-braintreepaypalbuttons--default) to learn more about the available props.
 
 ### PayPal Hosted Fields
 
@@ -268,7 +291,7 @@ const SubmitPayment = () => {
     const hostedFields = usePayPalHostedFields();
 
     const submitHandler = () => {
-        if (!typeof hostedFields.submit !== "function") return; // validate that `submit()` exists before using it
+        if (typeof hostedFields.submit !== "function") return; // validate that `submit()` exists before using it
         hostedFields
             .submit({
                 // The full name as shown in the card and billing address
@@ -295,8 +318,8 @@ export default function App() {
     return (
         <PayPalScriptProvider
             options={{
-                "client-id": "your-client-id",
-                "data-client-token": "your-data-client-token",
+                clientId: "your-client-id",
+                dataClientToken: "your-data-client-token",
             }}
         >
             <PayPalHostedFieldsProvider

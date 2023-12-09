@@ -13,7 +13,8 @@ const AUTH_TOKEN_STATEMENT = `const [clientToken, setClientToken] = useState(nul
 		(async () => {
 			const response = await (
 				await fetch(
-					"https://braintree-sdk-demo.herokuapp.com/api/braintree/auth"
+					"https://react-paypal-js-storybook.fly.dev/api/braintree/generate-client-token",
+					{ method: "POST" }
 				)
 			).json();
 			setClientToken(response?.client_token || response?.clientToken);
@@ -84,10 +85,10 @@ const ButtonWrapper = ({ currency }) => {
 const getProviderStatement = (args: { intent: string; vault: boolean }) =>
     `<PayPalScriptProvider
 						options={{
-							"client-id": "test",
+							clientId: "test",
 							components: "buttons",
-							// "data-user-id-token": "your-tokenization-key-here",
-							"data-client-token": clientToken,
+							// dataUserIdToken: "your-tokenization-key-here",
+							dataClientToken: clientToken,
 							intent: "${args.intent}",
 							vault: ${args.vault},
 						}}
@@ -147,7 +148,7 @@ export default function App() {
 								return actions.braintree.createPayment({
 									// Required
 									flow: "vault",
-					
+
 									// The following are optional params
 									billingAgreementDescription:
 										"Your agreement description",

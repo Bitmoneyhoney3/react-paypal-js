@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.1.3](https://github.com/paypal/react-paypal-js/compare/v8.1.2...v8.1.3) (2023-08-16)
+
+### [8.1.2](https://github.com/paypal/react-paypal-js/compare/v8.1.1...v8.1.2) (2023-08-16)
+
+### Bug Fixes
+
+-   allow users to change data-sdk-integration-source ([#378](https://github.com/paypal/react-paypal-js/issues/378)) ([0feef3e](https://github.com/paypal/react-paypal-js/commit/0feef3e834fb2b9aaf23029855447715915bd1b2))
+
+### [8.1.1](https://github.com/paypal/react-paypal-js/compare/v8.1.0...v8.1.1) (2023-07-28)
+
+## [8.1.0](https://github.com/paypal/react-paypal-js/compare/v8.0.0...v8.1.0) (2023-07-03)
+
+### Features
+
+-   add loadingStatusErrorMessage to state ([#366](https://github.com/paypal/react-paypal-js/issues/366)) ([e1b9068](https://github.com/paypal/react-paypal-js/commit/e1b9068931c0fb832d884a0879d22deeca8304c2))
+
+## [8.0.0](https://github.com/paypal/react-paypal-js/compare/v7.8.3...v8.0.0) (2023-06-12)
+
+### ⚠ BREAKING CHANGES
+
+-   this is a breaking change for PayPalScriptProvider options.
+
+### Features
+
+-   use camelCase for PayPalScriptProvider options ([#360](https://github.com/paypal/react-paypal-js/issues/360)) ([168764e](https://github.com/paypal/react-paypal-js/commit/168764e4fb89be8717f256d4f9817bdf8e0a6eed))
+
+### [7.8.3](https://github.com/paypal/react-paypal-js/compare/v7.8.2...v7.8.3) (2023-03-27)
+
+### [7.8.2](https://github.com/paypal/react-paypal-js/compare/v7.8.1...v7.8.2) (2022-11-30)
+
 ### [7.8.1](https://github.com/paypal/react-paypal-js/compare/v7.8.0...v7.8.1) (2022-05-27)
 
 ## [7.8.0](https://github.com/paypal/react-paypal-js/compare/v7.7.0...v7.8.0) (2022-05-17)

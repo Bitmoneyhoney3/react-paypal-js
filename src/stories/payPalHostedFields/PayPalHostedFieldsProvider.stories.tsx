@@ -11,7 +11,7 @@ import {
     getOptionsFromQueryString,
     generateRandomString,
     getClientToken,
-    HEROKU_SERVER,
+    FLY_SERVER,
 } from "../utils";
 import { COMPONENT_PROPS_CATEGORY, COMPONENT_EVENTS, SDK } from "../constants";
 import DocPageStructure from "../components/DocPageStructure";
@@ -23,10 +23,10 @@ import type { DocsContextProps } from "@storybook/addon-docs";
 import type { PayPalScriptOptions } from "@paypal/paypal-js";
 
 const uid = generateRandomString();
-const TOKEN_URL = `${HEROKU_SERVER}/api/paypal/hosted-fields/auth`;
+const TOKEN_URL = `${FLY_SERVER}/api/paypal/hosted-fields/auth`;
 const scriptProviderOptions: PayPalScriptOptions = {
-    "client-id":
-        "AdOu-W3GPkrfuTbJNuW9dWVijxvhaXHFIRuKrLDwu14UDwTTHWMFkUwuu9D8I1MAQluERl9cFOd7Mfqe",
+    clientId:
+        "AduyjUJ0A7urUcWtGCTjanhRBSzOSn9_GKUzxWDnf51YaV1eZNA0ZAFhebIV_Eq-daemeI7dH05KjLWm",
     components: "buttons,hosted-fields",
     ...getOptionsFromQueryString(),
 };
@@ -116,9 +116,9 @@ export default {
                             <PayPalScriptProvider
                                 options={{
                                     ...scriptProviderOptions,
-                                    "data-client-token": clientToken,
-                                    "data-namespace": uid,
-                                    "data-uid": uid,
+                                    dataClientToken: clientToken,
+                                    dataNamespace: uid,
+                                    dataUid: uid,
                                 }}
                             >
                                 <Story />
